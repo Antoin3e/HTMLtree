@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árbol de Agradecimientos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #august {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #tree {
+            position: relative;
+            width: 600px;
+            height: 600px;
+            background: url('https://th.bing.com/th/id/R.54afa469cea29a915f268abc2b5e2bcd?rik=C9OjI6%2b7k%2byDWw&riu=http%3a%2f%2fteen-aid.com%2fwp-content%2fuploads%2f2018%2f10%2ftree-without-leaves-clipart.png&ehk=5H7sRXXdoIh6PyhHfdKemTQZhBiFo%2bRdo%2b6sSQLJ47g%3d&risl=&pid=ImgRaw&r=0') no-repeat center;
+            background-size: contain;
+            border: 1px solid #ccc;
+        }
+        .leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: green;
+            border-radius: 50%;
+        }
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input, textarea {
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Thanks Tree</h1>
+    <div id="august">August</div>
+    <div id="tree"></div>
+    <form id="gratitudeForm">
+        <input type="text" id="name" placeholder="Tu Nombre" required>
+        <textarea id="message" placeholder="Mensaje de agradecimiento" required></textarea>
+        <button type="submit">Enviar</button>
+    </form>
+ 
+    <script>
+        document.getElementById('gratitudeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            if (name && message) {
+                addLeafToTree(message);
+                saveMessage(name, message);
+                document.getElementById('gratitudeForm').reset();
+            }
+        });
+ 
+        function addLeafToTree(message) {
+            var tree = document.getElementById('tree');
+            var leaf = document.createElement('div');
+            leaf.className = 'leaf';
+leaf.style.top = Math.random() * (tree.clientHeight - 20) + 'px';
+leaf.style.left = Math.random() * (tree.clientWidth - 20) + 'px';
+            leaf.title = message;
+            tree.appendChild(leaf);
+        }
+ 
+        function saveMessage(name, message) {
+            // Guardar el mensaje en el almacenamiento local
+            let messages = JSON.parse(localStorage.getItem('gratitudeMessages')) || [];
+            messages.push({ name: name, message: message });
+            localStorage.setItem('gratitudeMessages', JSON.stringify(messages));
+        }
+ 
+        function loadMessages() {
+            // Cargar mensajes del almacenamiento local
+            let messages = JSON.parse(localStorage.getItem('gratitudeMessages')) || [];
+            messages.forEach(msg => {
+                addLeafToTree(msg.message);
+            });
+        }
+ 
+        // Cargar mensajes al iniciar la página
+        loadMessages();
+    </script>
+</body>
+</html>
